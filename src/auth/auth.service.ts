@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync as bcryptCompareSync } from 'bcrypt';
-import { UsersService } from 'src/user/users.service';
+import { UsersService } from 'src/user/user.service';
 import { AuthResponseDto } from './auth.dto';
 import { ConfigService } from '@nestjs/config';
 

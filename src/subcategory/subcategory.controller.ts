@@ -18,7 +18,7 @@ export class SubcategoryController {
     return this.subcategoryService.findAll();
   }
 
-  @Get('/find-all/:idCategory')
+  @Get(':idCategory')
   findAllInCategory(@Param('idCategory') idCategory: string) {
     return this.subcategoryService.findAll(idCategory);
   }

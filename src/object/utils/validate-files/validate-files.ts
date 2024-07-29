@@ -14,6 +14,9 @@ export const validateFiles = (
   const objectFile = files['objectFile'][0];
   const { mimetype } = objectFile;
 
+  console.log(files['objectFile']);
+  console.log(typeof objectFile);
+
   isSuported(mimetype);
 
   if (files['objectFile'].length == 1) {
