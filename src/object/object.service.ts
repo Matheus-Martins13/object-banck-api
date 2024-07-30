@@ -15,6 +15,14 @@ export class ObjectService {
 
     ObjectDto.validateObject(object);
 
+    const listTags = [];
+
+    for (const tag of object.tags) {
+      listTags.push(tag);
+    }
+
+    console.log(listTags.map((tag) => console.log(tag)));
+
     try {
       const objectSaved = await this.prismaService.object.create({
         data: {
@@ -23,6 +31,11 @@ export class ObjectService {
           category: { connect: { idCategory: object.category } },
           subcategory: { connect: { idSubcategory: object.subcategory } },
           user: { connect: { idUser: object.user } },
+          tag: {
+            connect: object.tags?.map((tag: any) => ({
+              idTag: tag.idTag,
+            })),
+          },
         },
       });
       return objectSaved;

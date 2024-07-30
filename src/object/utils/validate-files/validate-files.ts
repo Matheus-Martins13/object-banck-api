@@ -11,15 +11,21 @@ export const validateFiles = (
       'Um arquivo deve ser selecionado para o objeto',
     ]);
   }
-  const objectFile = files['objectFile'][0];
-  const { mimetype } = objectFile;
+  const listFilesIterator = files['objectFile'];
 
-  console.log(files['objectFile']);
-  console.log(typeof objectFile);
+  const listFiles = [];
+
+  for (const file of listFilesIterator) {
+    listFiles.push(file);
+  }
+
+  const objectFile = listFiles[0];
+
+  const { mimetype } = objectFile;
 
   isSuported(mimetype);
 
-  if (files['objectFile'].length == 1) {
+  if (listFiles.length == 1) {
     // Imagens
     if (
       mimetype.startsWith('image/png') ||
@@ -74,10 +80,10 @@ export const validateFiles = (
         path: `/objects/default-thumb-image.png`,
       };
     }
-  } else if (files['objectFiles'].length == 2) {
+  } else if (listFiles.length == 2) {
     newObject.thumb = {
-      name: files[1].key,
-      path: files[1].location,
+      name: listFiles[1].key,
+      path: listFiles[1].location,
     };
   } else {
     throw new BadRequestException([
