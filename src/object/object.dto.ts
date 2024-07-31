@@ -6,7 +6,7 @@ export class ObjectDto {
   description: string;
   category: string;
   subcategory: string;
-  tags?: [];
+  tags?: string;
   thumb: { name: string; path: string };
   objectFile: {
     name: string;

@@ -15,6 +15,11 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
+  @Get('/find-all-with-objects')
+  findAllWithObjects() {
+    return this.categoryService.findAllWithObjects();
+  }
+
   @Delete(':idCategory')
   remove(@Param('idCategory') idCategory: string) {
     return this.categoryService.remove(idCategory);

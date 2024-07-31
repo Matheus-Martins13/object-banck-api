@@ -61,7 +61,21 @@ export class CategoryService {
   async findAllWithObjects() {
     const categoriesWithObjects = await this.prisma.category.findMany({
       include: {
-        Object: true,
+        object: {
+          select: {
+            user: {
+              select: { idUser: true, person: { select: { name: true } } },
+            },
+            name: true,
+            createdAt: true,
+            updatedAt: true,
+            description: true,
+            idObject: true,
+            objectFile: true,
+            objectPicture: true,
+            tag: true,
+          },
+        },
       },
     });
 
