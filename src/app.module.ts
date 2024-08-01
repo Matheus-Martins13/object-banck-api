@@ -11,6 +11,7 @@ import { CategoryModule } from './category/category.module';
 import { SubcategoryModule } from './subcategory/subcategory.module';
 import { TagModule } from './tag/tag.module';
 import { CommentModule } from './comment/comment.module';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CommentModule } from './comment/comment.module';
     SubcategoryModule,
     TagModule,
     CommentModule,
+    FavoriteModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, ObjectService],

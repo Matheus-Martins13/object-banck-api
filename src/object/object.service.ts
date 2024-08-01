@@ -52,11 +52,19 @@ export class ObjectService {
   async findById(idObject: string) {
     const objectFound = await this.prismaService.object.findUnique({
       where: { idObject },
-      include: {
-        objectPicture: true,
-        objectFile: true,
+      select: {
+        user: {
+          select: { idUser: true, person: { select: { name: true } } },
+        },
         category: true,
         subcategory: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+        description: true,
+        idObject: true,
+        objectFile: true,
+        objectPicture: true,
         tag: true,
       },
     });
