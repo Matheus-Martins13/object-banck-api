@@ -14,11 +14,11 @@ export class CategoryService {
       throw new BadRequestException(['O nome da categoria é obrigatório']);
     }
     try {
-      const categoryFound = this.findByName(name);
+      const categoryFound = await this.findByName(name);
 
       if (categoryFound) {
         throw new ConflictException([
-          `A subcategoria ${name} já está cadastrada`,
+          `A categoria '${name}' já está cadastrada`,
         ]);
       }
 
