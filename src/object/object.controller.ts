@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -25,5 +27,10 @@ export class ObjectController {
     @Body() object: ObjectDto,
   ) {
     return this.objectService.create(object, files);
+  }
+
+  @Get(':idObject')
+  async findById(@Param('idObject') idObject: string) {
+    return await this.objectService.findById(idObject);
   }
 }

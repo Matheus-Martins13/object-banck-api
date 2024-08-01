@@ -48,4 +48,21 @@ export class ObjectService {
       throw err;
     }
   }
+
+  async findById(idObject: string) {
+    const objectFound = await this.prismaService.object.findUnique({
+      where: { idObject },
+      include: {
+        objectPicture: true,
+        objectFile: true,
+        category: true,
+        subcategory: true,
+        tag: true,
+      },
+    });
+
+    if (!objectFound) return null;
+
+    return objectFound;
+  }
 }
