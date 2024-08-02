@@ -106,4 +106,30 @@ export class CategoryService {
       throw err;
     }
   }
+
+  async update(idCategory: string, name: string) {
+    if (!idCategory)
+      throw new BadRequestException(['O id da categoria é obrigatório']);
+    if (!name)
+      throw new BadRequestException(['O nome da categoria é obrigatório']);
+
+    try {
+      const categoryFound = await this.prisma.category.findUnique({
+        where: { idCategory },
+      });
+      if (!categoryFound)
+        throw new BadRequestException([
+          `Nenhuma categoria com id ${idCategory} encontrada`,
+        ]);
+
+      const categoryUpdated = await this.prisma.category.update({
+        where: { idCategory },
+        data: { name },
+      });
+
+      return categoryUpdated;
+    } catch (err) {
+      throw err;
+    }
+  }
 }

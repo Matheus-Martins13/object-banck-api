@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
 
 @Controller('category')
@@ -23,5 +31,10 @@ export class CategoryController {
   @Delete(':idCategory')
   remove(@Param('idCategory') idCategory: string) {
     return this.categoryService.remove(idCategory);
+  }
+
+  @Patch(':idCategory')
+  update(@Param('idCategory') idCategory: string, @Body('name') name: string) {
+    return this.categoryService.update(idCategory, name);
   }
 }
