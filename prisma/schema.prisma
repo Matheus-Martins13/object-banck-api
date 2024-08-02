@@ -144,27 +144,27 @@ model ObjectFile {
 }
 
 model Comment {
-  idUser      String   @unique @map("id_user")
+  idComment   String   @id @default(uuid()) @map("id_comment")
+  idUser      String   @map("id_user")
   user        User     @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
-  idObject    String   @unique @map("id_object")
+  idObject    String   @map("id_object")
   object      Object   @relation(fields: [idObject], references: [idObject], onDelete: Cascade)
   description String
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  @@id([idUser, idObject])
   @@map("comment")
 }
 
 model Favorite {
-  idUser    String   @unique @map("id_user")
-  user      User     @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
-  idObject  String   @unique @map("id_object")
-  object    Object   @relation(fields: [idObject], references: [idObject], onDelete: Cascade)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  idFavorite String   @id @default(uuid()) @map("id_favorite")
+  idUser     String   @map("id_user")
+  user       User     @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
+  idObject   String   @map("id_object")
+  object     Object   @relation(fields: [idObject], references: [idObject], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
-  @@id([idUser, idObject])
   @@map("favorite")
 }
 

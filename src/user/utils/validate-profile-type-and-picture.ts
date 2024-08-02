@@ -9,7 +9,7 @@ export const validateProfileTypeAndPicture = (
   if (!photo) {
     newUser.profilePicture = {
       name: `default-picture-${newUser.name}`,
-      path: '/users/default-profile-picture.png',
+      path: '/users/profile-picture/default-profile-picture.png',
     };
   } else {
     newUser.profilePicture = {

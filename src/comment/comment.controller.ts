@@ -11,7 +11,7 @@ export class CommentController {
     return await this.commentService.create(comment);
   }
 
-  @Get()
+  @Get(':idObject')
   async findAllByObject(@Param('idObject') idObject: string) {
     return await this.commentService.findAllByObject(idObject);
   }
