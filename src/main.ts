@@ -23,9 +23,7 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
-  app.enableCors({
-    origin: true,
-  });
+  app.enableCors();
   await app.listen(3001);
 }
 bootstrap();
