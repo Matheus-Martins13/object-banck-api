@@ -73,4 +73,8 @@ export class ObjectService {
 
     return objectFound;
   }
+
+  async findAll() {
+    return await this.prismaService.object.findMany();
+  }
 }

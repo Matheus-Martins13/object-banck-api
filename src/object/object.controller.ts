@@ -33,4 +33,9 @@ export class ObjectController {
   async findById(@Param('idObject') idObject: string) {
     return await this.objectService.findById(idObject);
   }
+
+  @Get('find-all')
+  async findAll() {
+    return await this.objectService.findAll();
+  }
 }
