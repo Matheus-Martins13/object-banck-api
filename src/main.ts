@@ -6,7 +6,9 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: { origin: ['www.raptorise.com.br', 'raptorise.com.br'] },
+  });
 
   app.useGlobalPipes(new ValidationPipe());
 
@@ -23,7 +25,6 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
-  app.enableCors();
   await app.listen(3001);
 }
 bootstrap();
