@@ -23,9 +23,9 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
-  @Get('/find-all-with-objects')
+  @Get('/find-all-complet')
   findAllWithObjects() {
-    return this.categoryService.findAllWithObjects();
+    return this.categoryService.findAllComplet();
   }
 
   @Delete(':idCategory')

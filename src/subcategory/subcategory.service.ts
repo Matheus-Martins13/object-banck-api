@@ -97,4 +97,31 @@ export class SubcategoryService {
       throw err;
     }
   }
+
+  async update(idSubcategory: string, name: string) {
+    if (!idSubcategory)
+      throw new BadRequestException(['O id da subcategoria é obrigatório']);
+    if (!name)
+      throw new BadRequestException(['O nome da subcategoria é obrigatório']);
+
+    try {
+      const subcategoryFound = await this.prisma.subcategory.findUnique({
+        where: { idSubcategory },
+      });
+
+      if (!subcategoryFound)
+        throw new BadRequestException([
+          `Nenhuma subcategoria com id ${idSubcategory} encontrada`,
+        ]);
+
+      const categoryUpdated = await this.prisma.subcategory.update({
+        where: { idSubcategory },
+        data: { name },
+      });
+
+      return categoryUpdated;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
