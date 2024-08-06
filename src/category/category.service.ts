@@ -90,6 +90,39 @@ export class CategoryService {
     return categoriesWithObjects;
   }
 
+  async findByIdComplet(idCategory: string) {
+    const categoryWithObjects = await this.prisma.category.findUnique({
+      where: { idCategory },
+      include: {
+        subcategory: {
+          select: {
+            idSubcategory: true,
+            name: true,
+            object: {
+              select: {
+                user: {
+                  select: { idUser: true, person: { select: { name: true } } },
+                },
+                category: true,
+                subcategory: true,
+                name: true,
+                createdAt: true,
+                updatedAt: true,
+                description: true,
+                idObject: true,
+                objectFile: true,
+                objectPicture: true,
+                tag: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return categoryWithObjects;
+  }
+
   async remove(idCategory: string) {
     if (!idCategory) {
       throw new BadRequestException(['O id da categoria é obrigatório']);

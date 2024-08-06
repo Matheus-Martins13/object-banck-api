@@ -23,6 +23,11 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
+  @Get('/find-complet-by-id/:idCategory')
+  async findByIdComplet(@Param('idCategory') idCategory: string) {
+    return await this.categoryService.findByIdComplet(idCategory);
+  }
+
   @Get('/find-all-complet')
   findAllWithObjects() {
     return this.categoryService.findAllComplet();
