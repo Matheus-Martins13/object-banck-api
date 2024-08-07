@@ -4,8 +4,7 @@ export class ObjectDto {
   idObject?: string;
   name: string;
   description: string;
-  category: string;
-  subcategory: string;
+  collection: string;
   tags?: string;
   thumb: { name: string; path: string };
   objectFile: {
@@ -21,10 +20,8 @@ export class ObjectDto {
       throw new BadRequestException(['O nome do objeto é obrigatório']);
     if (!newObject.description)
       throw new BadRequestException(['A descrição do objeto é obrigatória']);
-    if (!newObject.category)
-      throw new BadRequestException(['A categoria do objeto é obrigatória']);
-    if (!newObject.subcategory)
-      throw new BadRequestException(['A subcategoria do objeto é obrigatória']);
+    if (!newObject.collection)
+      throw new BadRequestException(['A coleção do objeto é obrigatória']);
     if (!newObject.objectFile)
       throw new BadRequestException(['O arquivo do objeto é obrigatório']);
     if (!newObject.user)
@@ -35,8 +32,7 @@ export class ObjectDto {
 export class ObjectUpdateDto {
   name: string;
   description: string;
-  category: string;
-  subcategory: string;
+  collection: string;
   tags?: string;
 
   static validateObject(objectUpdate: ObjectUpdateDto, idObject: string) {
@@ -44,10 +40,9 @@ export class ObjectUpdateDto {
       throw new BadRequestException(['O nome do objeto é obrigatório']);
     if (!objectUpdate.description)
       throw new BadRequestException(['A descrição do objeto é obrigatória']);
-    if (!objectUpdate.category)
-      throw new BadRequestException(['A categoria do objeto é obrigatória']);
-    if (!objectUpdate.subcategory)
-      throw new BadRequestException(['A subcategoria do objeto é obrigatória']);
-    if (!idObject) throw new BadRequestException(['O idObject é obrigatório']);
+    if (!objectUpdate.collection)
+      throw new BadRequestException(['A coleção do objeto é obrigatória']);
+    if (!idObject)
+      throw new BadRequestException(['O id do objeto é obrigatório']);
   }
 }

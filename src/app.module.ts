@@ -7,8 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma/prisma.service';
 import { ObjectService } from './object/object.service';
 import { ObjectModule } from './object/object.module';
-import { CategoryModule } from './category/category.module';
-import { SubcategoryModule } from './subcategory/subcategory.module';
+import { CollectionModule } from './collection/collection.module';
 import { TagModule } from './tag/tag.module';
 import { CommentModule } from './comment/comment.module';
 import { FavoriteModule } from './favorite/favorite.module';
@@ -19,8 +18,7 @@ import { FavoriteModule } from './favorite/favorite.module';
     UsersModule,
     AuthModule,
     ObjectModule,
-    CategoryModule,
-    SubcategoryModule,
+    CollectionModule,
     TagModule,
     CommentModule,
     FavoriteModule,

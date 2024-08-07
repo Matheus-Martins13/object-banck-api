@@ -104,10 +104,8 @@ model Object {
   updatedAt     DateTime       @updatedAt @map("updated_at")
   idUser        String         @map("id_user")
   user          User           @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
-  idCategory    String         @map("id_category")
-  category      Category       @relation(fields: [idCategory], references: [idCategory], onDelete: Cascade)
-  idSubcategory String         @map("id_subcategory")
-  subcategory   Subcategory    @relation(fields: [idSubcategory], references: [idSubcategory], onDelete: Cascade)
+  idCollection  String         @map("id_collection")
+  collection    Collection     @relation(fields: [idCollection], references: [idCollection], onDelete: Cascade)
   objectPicture ObjectPicture?
   objectFile    ObjectFile?
   tag           Tag[]
@@ -168,27 +166,14 @@ model Favorite {
   @@map("favorite")
 }
 
-model Category {
-  idCategory  String        @id @default(uuid()) @map("id_category")
-  name        String        @unique
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @updatedAt @map("updated_at")
-  subcategory Subcategory[]
-  object      Object[]
+model Collection {
+  idCollection String   @id @default(uuid()) @map("id_collection")
+  name         String   @unique
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  object       Object[]
 
-  @@map("category")
-}
-
-model Subcategory {
-  idSubcategory String   @id @default(uuid()) @map("id_subcategory")
-  name          String   @unique
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-  idCategory    String   @map("id_category")
-  category      Category @relation(fields: [idCategory], references: [idCategory])
-  object        Object[]
-
-  @@map("subcategory")
+  @@map("collection")
 }
 
 model Tag {

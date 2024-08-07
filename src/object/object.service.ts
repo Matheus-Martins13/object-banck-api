@@ -22,8 +22,7 @@ export class ObjectService {
         data: {
           name: object.name,
           description: object.description,
-          category: { connect: { idCategory: object.category } },
-          subcategory: { connect: { idSubcategory: object.subcategory } },
+          collection: { connect: { idCollection: object.collection } },
           user: { connect: { idUser: object.user } },
           tag: {
             connect: listTags?.map((tag: any) => ({
@@ -56,8 +55,7 @@ export class ObjectService {
         user: {
           select: { idUser: true, person: { select: { name: true } } },
         },
-        category: true,
-        subcategory: true,
+        collection: true,
         name: true,
         createdAt: true,
         updatedAt: true,
@@ -79,8 +77,6 @@ export class ObjectService {
   }
 
   async update(idObject: string, objectUpdate: ObjectUpdateDto) {
-    console.log(objectUpdate);
-
     ObjectUpdateDto.validateObject(objectUpdate, idObject);
     await this.validateData(objectUpdate);
 
@@ -91,8 +87,7 @@ export class ObjectService {
         data: {
           name: objectUpdate.name,
           description: objectUpdate.description,
-          category: { connect: { idCategory: objectUpdate.category } },
-          subcategory: { connect: { idSubcategory: objectUpdate.subcategory } },
+          collection: { connect: { idCollection: objectUpdate.collection } },
           tag: {
             connect: listTags?.map((tag: any) => ({
               idTag: tag.idTag,
@@ -109,22 +104,13 @@ export class ObjectService {
 
   private async validateData(objectUpdate: ObjectUpdateDto) {
     try {
-      const categoryFound = await this.prismaService.category.findUnique({
-        where: { idCategory: objectUpdate.category },
+      const collectionFound = await this.prismaService.collection.findUnique({
+        where: { idCollection: objectUpdate.collection },
       });
 
-      if (!categoryFound)
+      if (!collectionFound)
         throw new BadRequestException([
-          `Nenhuma categoria com id ${objectUpdate.category} encontrada`,
-        ]);
-
-      const subcategoryFound = await this.prismaService.subcategory.findUnique({
-        where: { idSubcategory: objectUpdate.subcategory },
-      });
-
-      if (!subcategoryFound)
-        throw new BadRequestException([
-          `Nenhuma subcategoria com id ${objectUpdate.subcategory} encontrada`,
+          `Nenhuma coleção com id ${objectUpdate.collection} encontrada`,
         ]);
     } catch (err) {
       throw err;
@@ -133,7 +119,7 @@ export class ObjectService {
 
   async remove(idObject: string) {
     if (!idObject) {
-      throw new BadRequestException(['O id da categoria é obrigatório']);
+      throw new BadRequestException(['O id do objeto é obrigatório']);
     }
     try {
       const objectFound = await this.prismaService.object.findUnique({
