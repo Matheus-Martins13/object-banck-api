@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CategoryService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
   async create(name: string) {
     if (!name) {
@@ -22,7 +22,7 @@ export class CategoryService {
         ]);
       }
 
-      const categorySaved = this.prisma.category.create({
+      const categorySaved = this.prismaService.category.create({
         data: {
           name,
         },
@@ -34,7 +34,7 @@ export class CategoryService {
   }
 
   async findById(idCategory: string) {
-    const categoryFound = await this.prisma.category.findUnique({
+    const categoryFound = await this.prismaService.category.findUnique({
       where: { idCategory },
     });
 
@@ -44,7 +44,7 @@ export class CategoryService {
   }
 
   async findByName(name: string) {
-    const categoryFound = await this.prisma.category.findUnique({
+    const categoryFound = await this.prismaService.category.findUnique({
       where: { name: name },
     });
 
@@ -54,12 +54,12 @@ export class CategoryService {
   }
 
   async findAll() {
-    const categories = await this.prisma.category.findMany();
+    const categories = await this.prismaService.category.findMany();
     return categories;
   }
 
   async findAllComplet() {
-    const categoriesWithObjects = await this.prisma.category.findMany({
+    const categoriesWithObjects = await this.prismaService.category.findMany({
       include: {
         subcategory: {
           select: {
@@ -91,7 +91,7 @@ export class CategoryService {
   }
 
   async findByIdComplet(idCategory: string) {
-    const categoryWithObjects = await this.prisma.category.findUnique({
+    const categoryWithObjects = await this.prismaService.category.findUnique({
       where: { idCategory },
       include: {
         subcategory: {
@@ -128,7 +128,7 @@ export class CategoryService {
       throw new BadRequestException(['O id da categoria é obrigatório']);
     }
     try {
-      const categoryFound = await this.prisma.category.findUnique({
+      const categoryFound = await this.prismaService.category.findUnique({
         where: { idCategory },
       });
 
@@ -138,7 +138,7 @@ export class CategoryService {
         ]);
       }
 
-      const categoryDeleted = await this.prisma.category.delete({
+      const categoryDeleted = await this.prismaService.category.delete({
         where: { idCategory },
       });
 
@@ -155,7 +155,7 @@ export class CategoryService {
       throw new BadRequestException(['O nome da categoria é obrigatório']);
 
     try {
-      const categoryFound = await this.prisma.category.findUnique({
+      const categoryFound = await this.prismaService.category.findUnique({
         where: { idCategory },
       });
       if (!categoryFound)
@@ -163,7 +163,7 @@ export class CategoryService {
           `Nenhuma categoria com id ${idCategory} encontrada`,
         ]);
 
-      const categoryUpdated = await this.prisma.category.update({
+      const categoryUpdated = await this.prismaService.category.update({
         where: { idCategory },
         data: { name },
       });

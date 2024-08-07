@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -10,8 +12,8 @@ import {
 
 import { ObjectService } from './object.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ObjectDto, ObjectUpdateDto } from './object.dto';
 import objectFileMulterConfig from './multer/objectFile-multer-config';
-import { ObjectDto } from './object.dto';
 
 @Controller('object')
 export class ObjectController {
@@ -37,5 +39,18 @@ export class ObjectController {
   @Get('find-all')
   async findAll() {
     return await this.objectService.findAll();
+  }
+
+  @Patch(':idObject')
+  update(
+    @Param('idObject') idObject: string,
+    @Body() objectUpdate: ObjectUpdateDto,
+  ) {
+    return this.objectService.update(idObject, objectUpdate);
+  }
+
+  @Delete(':idObject')
+  remove(@Param('idObject') idObject: string) {
+    return this.objectService.remove(idObject);
   }
 }

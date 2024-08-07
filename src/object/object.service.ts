@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ObjectDto } from './object.dto';
+import { ObjectDto, ObjectUpdateDto } from './object.dto';
 import { validateFiles } from './utils/validate-files/validate-files';
 
 @Injectable()
@@ -76,5 +76,83 @@ export class ObjectService {
 
   async findAll() {
     return await this.prismaService.object.findMany();
+  }
+
+  async update(idObject: string, objectUpdate: ObjectUpdateDto) {
+    console.log(objectUpdate);
+
+    ObjectUpdateDto.validateObject(objectUpdate, idObject);
+    await this.validateData(objectUpdate);
+
+    const listTags: [] = JSON.parse(objectUpdate.tags);
+    try {
+      const objectUpdated = await this.prismaService.object.update({
+        where: { idObject: idObject },
+        data: {
+          name: objectUpdate.name,
+          description: objectUpdate.description,
+          category: { connect: { idCategory: objectUpdate.category } },
+          subcategory: { connect: { idSubcategory: objectUpdate.subcategory } },
+          tag: {
+            connect: listTags?.map((tag: any) => ({
+              idTag: tag.idTag,
+            })),
+          },
+        },
+      });
+
+      return objectUpdated;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  private async validateData(objectUpdate: ObjectUpdateDto) {
+    try {
+      const categoryFound = await this.prismaService.category.findUnique({
+        where: { idCategory: objectUpdate.category },
+      });
+
+      if (!categoryFound)
+        throw new BadRequestException([
+          `Nenhuma categoria com id ${objectUpdate.category} encontrada`,
+        ]);
+
+      const subcategoryFound = await this.prismaService.subcategory.findUnique({
+        where: { idSubcategory: objectUpdate.subcategory },
+      });
+
+      if (!subcategoryFound)
+        throw new BadRequestException([
+          `Nenhuma subcategoria com id ${objectUpdate.subcategory} encontrada`,
+        ]);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async remove(idObject: string) {
+    if (!idObject) {
+      throw new BadRequestException(['O id da categoria é obrigatório']);
+    }
+    try {
+      const objectFound = await this.prismaService.object.findUnique({
+        where: { idObject },
+      });
+
+      if (!objectFound) {
+        throw new BadRequestException([
+          `Nenhum objeto encontrada com id ${idObject}`,
+        ]);
+      }
+
+      const objectDeleted = await this.prismaService.object.delete({
+        where: { idObject },
+      });
+
+      return objectDeleted;
+    } catch (err) {
+      throw err;
+    }
   }
 }
