@@ -1,11 +1,11 @@
 // imports nestjs
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 // imports libs terceiras
 import { hashSync as bcryptHashSync } from 'bcrypt';
 
 // imports dto
-import { UserDto } from './user.dto';
+import { UpdateUserDto, UserDto } from './user.dto';
 
 // imports services
 import { removeImage } from 'src/utils/remove-image.util';
@@ -18,7 +18,7 @@ import { findByPhoneNumber } from './utils/find-by-phone-number.utl';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
   async create(newUser: UserDto, photo?: Express.Multer.File) {
     // Config profile type and picture
@@ -32,14 +32,14 @@ export class UsersService {
     newUser.profileType = profileType;
     newUser.profilePicture = profilePicture;
 
-    await validateData(newUser, this.prisma);
+    await validateData(newUser, this.prismaService);
 
     // Config password
     const passwordHash = bcryptHashSync(newUser.password, 10);
     newUser.password = passwordHash;
 
     try {
-      const userSaved = await this.prisma.user.create({
+      const userSaved = await this.prismaService.user.create({
         data: {
           email: newUser.email,
           passwordHash: newUser.password,
@@ -72,18 +72,152 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.prisma.user.findMany();
+    return this.prismaService.user.findMany();
+  }
+
+  async findAllComplete() {
+    const users = await this.prismaService.user.findMany({
+      select: {
+        idUser: true,
+        email: true,
+        profile: {
+          select: { type: true },
+        },
+        person: {
+          select: {
+            cpf: true,
+            name: true,
+            contact: { select: { phone: true } },
+          },
+        },
+      },
+    });
+
+    return users;
   }
 
   async findByEmail(email: string) {
-    return await findByEmail(email, this.prisma);
+    return await findByEmail(email, this.prismaService);
   }
 
   async findByCpf(cpf: string) {
-    return await findByCpf(cpf, this.prisma);
+    return await findByCpf(cpf, this.prismaService);
+  }
+
+  async findById(idUser: string) {
+    return await this.prismaService.user.findUnique({
+      where: { idUser },
+      select: {
+        idUser: true,
+        email: true,
+        profile: {
+          select: { type: true },
+        },
+        person: {
+          select: {
+            cpf: true,
+            name: true,
+            contact: { select: { phone: true } },
+          },
+        },
+      },
+    });
   }
 
   async findByPhoneNumber(phone: string) {
-    return await findByPhoneNumber(phone, this.prisma);
+    return await findByPhoneNumber(phone, this.prismaService);
+  }
+
+  async remove(idUser: string) {
+    if (!idUser) {
+      throw new BadRequestException(['O id do usuário é obrigatório']);
+    }
+    try {
+      const userFound = await this.findById(idUser);
+
+      if (!userFound) {
+        throw new BadRequestException([
+          `Nenhum usuário encontrado com id ${idUser}`,
+        ]);
+      }
+
+      const userDeleted = await this.prismaService.user.delete({
+        where: { idUser },
+      });
+
+      return userDeleted;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async update(idUser: string, updateUserDto: UpdateUserDto) {
+    UpdateUserDto.validateDto(updateUserDto, idUser);
+
+    try {
+      const userFound = await this.findById(idUser);
+
+      if (!userFound) {
+        throw new BadRequestException([
+          `Nenhum usuário encontrado com id ${idUser}`,
+        ]);
+      }
+
+      if (updateUserDto.password) {
+        const passwordHash = bcryptHashSync(updateUserDto.password, 10);
+        const userUpdated = await this.prismaService.user.update({
+          where: { idUser },
+          data: {
+            email: updateUserDto.email,
+            passwordHash,
+            profile: {
+              update: {
+                type: updateUserDto.type,
+              },
+            },
+            person: {
+              update: {
+                name: updateUserDto.name,
+                cpf: updateUserDto.cpf,
+                contact: {
+                  update: {
+                    phone: updateUserDto.phone,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        return userUpdated;
+      }
+
+      const userUpdated = await this.prismaService.user.update({
+        where: { idUser },
+        data: {
+          email: updateUserDto.email,
+          profile: {
+            update: {
+              type: updateUserDto.type,
+            },
+          },
+          person: {
+            update: {
+              name: updateUserDto.name,
+              cpf: updateUserDto.cpf,
+              contact: {
+                update: {
+                  phone: updateUserDto.phone,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return userUpdated;
+    } catch (err) {
+      throw err;
+    }
   }
 }

@@ -64,3 +64,28 @@ export class UserDto {
     }
   }
 }
+
+export class UpdateUserDto {
+  idUser: string;
+  name: string;
+  cpf: string;
+  phone: string;
+  email: string;
+  type: string;
+  password?: string;
+
+  static validateDto(updateUserDto: UpdateUserDto, idUser: string) {
+    if (!idUser)
+      throw new BadRequestException(['O id do usuário é obrigatório']);
+    if (!updateUserDto.name)
+      throw new BadRequestException(['O nome do usuário é obrigatório']);
+    if (!updateUserDto.cpf)
+      throw new BadRequestException(['O CPF do usuário é obrigatório']);
+    if (!updateUserDto.phone)
+      throw new BadRequestException(['O telefone do usuário é obrigatório']);
+    if (!updateUserDto.email)
+      throw new BadRequestException(['O e-mail do usuário é obrigatório']);
+    if (!updateUserDto.type)
+      throw new BadRequestException(['O tipo do usuário é obrigatório']);
+  }
+}

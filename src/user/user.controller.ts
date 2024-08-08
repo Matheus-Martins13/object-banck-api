@@ -1,16 +1,17 @@
 import {
   Body,
   Controller,
-  // Delete,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
-import { UserDto } from './user.dto';
+import { UserDto, UpdateUserDto } from './user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -36,9 +37,22 @@ export class UsersController {
   findAll() {
     return this.usersService.findAll();
   }
-  // @UseGuards(AuthGuard)
-  // @Delete('/:id')
-  // async remove(@Param('id') id: string) {
-  //   return this.usersService.remove(id);
-  // }
+
+  @Get('/find-all-complete')
+  findAllComplete() {
+    return this.usersService.findAllComplete();
+  }
+
+  @Delete(':idUser')
+  async remove(@Param('idUser') idUser: string) {
+    return this.usersService.remove(idUser);
+  }
+
+  @Patch(':idUser')
+  async update(
+    @Param('idUser') idUser: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(idUser, updateUserDto);
+  }
 }
