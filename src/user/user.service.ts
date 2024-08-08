@@ -31,7 +31,6 @@ export class UsersService {
 
     newUser.profileType = profileType;
     newUser.profilePicture = profilePicture;
-    newUser.birthday = new Date(newUser.birthday);
 
     await validateData(newUser, this.prisma);
 
@@ -56,18 +55,6 @@ export class UsersService {
             create: {
               name: newUser.name,
               cpf: newUser.cpf,
-              birthday: newUser.birthday,
-              address: {
-                create: {
-                  estado: newUser.estado,
-                  cidade: newUser.cidade,
-                  bairro: newUser.bairro,
-                  cep: newUser.cep,
-                  logradouro: newUser.logradouro,
-                  numero: newUser.numero,
-                  complemento: newUser.complemento,
-                },
-              },
               contact: {
                 create: {
                   phone: newUser.phone,

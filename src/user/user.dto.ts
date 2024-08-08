@@ -9,7 +9,6 @@ export enum UserStatusEnum {
 
 export enum ProfileTypeEnum {
   ALUNO = 'ALUNO',
-  PROFESSOR = 'PROFESSOR',
   ADMINISTRADOR = 'ADMINISTRADOR',
 }
 
@@ -31,14 +30,6 @@ export class UserDto {
   idUser?: string;
   name: string;
   cpf: string;
-  birthday: Date;
-  cep: string;
-  estado: string;
-  numero?: string;
-  complemento?: string;
-  cidade: string;
-  bairro: string;
-  logradouro: string;
   phone: string;
   email: string;
   password: string;
@@ -52,29 +43,11 @@ export class UserDto {
       return re.test(email);
     };
 
-    const requiredProps = [
-      'name',
-      'cpf',
-      'birthday',
-      'cep',
-      'estado',
-      'cidade',
-      'bairro',
-      'logradouro',
-      'phone',
-      'email',
-      'password',
-    ];
+    const requiredProps = ['name', 'cpf', 'phone', 'email', 'password'];
 
     if (
       !newUser.name ||
       !newUser.cpf ||
-      !newUser.birthday ||
-      !newUser.cep ||
-      !newUser.estado ||
-      !newUser.cidade ||
-      !newUser.bairro ||
-      !newUser.logradouro ||
       !newUser.phone ||
       !newUser.email ||
       !newUser.password
@@ -88,11 +61,6 @@ export class UserDto {
     if (!validateEmail(newUser.email)) {
       removeImage(newUser.profilePicture.path);
       throw new BadRequestException(['E-mail inválido']);
-    }
-
-    if (newUser.cep.length < 8) {
-      removeImage(newUser.profilePicture.path);
-      throw new BadRequestException(['O CEP deve conter 8 dígitos']);
     }
   }
 }

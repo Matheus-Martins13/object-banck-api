@@ -17,31 +17,12 @@ model Person {
   idPerson  String   @id @default(uuid()) @map("id_person")
   name      String
   cpf       String   @unique
-  birthday  DateTime
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  address   Address?
   contact   Contact?
   user      User?
 
   @@map("person")
-}
-
-model Address {
-  idAddress   String   @id @default(uuid()) @map("id_address")
-  cep         String
-  estado      String
-  numero      String?
-  complemento String?
-  cidade      String
-  bairro      String
-  logradouro  String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  idPerson    String   @unique @map("id_person")
-  person      Person   @relation(fields: [idPerson], references: [idPerson], onDelete: Cascade)
-
-  @@map("address")
 }
 
 model Contact {
