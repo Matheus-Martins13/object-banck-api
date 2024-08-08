@@ -5,6 +5,7 @@ export class ObjectDto {
   name: string;
   description: string;
   collection: string;
+  type?: string;
   tags?: string;
   thumb: { name: string; path: string };
   objectFile: {

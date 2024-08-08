@@ -41,6 +41,11 @@ export class ObjectController {
     return await this.objectService.findAll();
   }
 
+  @Get('find-by-type/:type')
+  async findByType(@Param('type') type: string) {
+    return await this.objectService.findByType(type);
+  }
+
   @Patch(':idObject')
   update(
     @Param('idObject') idObject: string,

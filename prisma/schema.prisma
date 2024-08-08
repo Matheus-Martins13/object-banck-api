@@ -81,6 +81,7 @@ model Object {
   idObject      String         @id @default(uuid()) @map("id_object")
   name          String
   description   String
+  type          String
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")
   idUser        String         @map("id_user")

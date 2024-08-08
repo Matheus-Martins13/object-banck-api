@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ObjectDto, ObjectUpdateDto } from './object.dto';
 import { validateFiles } from './utils/validate-files/validate-files';
+import { formatType } from './utils/format-type';
 
 @Injectable()
 export class ObjectService {
@@ -24,6 +25,7 @@ export class ObjectService {
           description: object.description,
           collection: { connect: { idCollection: object.collection } },
           user: { connect: { idUser: object.user } },
+          type: formatType(object.objectFile.mimetype),
           tag: {
             connect: listTags?.map((tag: any) => ({
               idTag: tag.idTag,
@@ -63,6 +65,7 @@ export class ObjectService {
         idObject: true,
         objectFile: true,
         objectPicture: true,
+        type: true,
         tag: true,
       },
     });
@@ -74,6 +77,27 @@ export class ObjectService {
 
   async findAll() {
     return await this.prismaService.object.findMany();
+  }
+
+  async findByType(type: string) {
+    return await this.prismaService.object.findMany({
+      where: { type },
+      select: {
+        user: {
+          select: { idUser: true, person: { select: { name: true } } },
+        },
+        collection: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+        description: true,
+        idObject: true,
+        objectFile: true,
+        objectPicture: true,
+        type: true,
+        tag: true,
+      },
+    });
   }
 
   async update(idObject: string, objectUpdate: ObjectUpdateDto) {

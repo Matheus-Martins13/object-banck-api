@@ -104,6 +104,7 @@ export class CollectionService {
               idObject: true,
               objectFile: true,
               objectPicture: true,
+              type: true,
               tag: true,
             },
           },
